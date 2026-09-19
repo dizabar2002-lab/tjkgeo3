@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="plotly.min.js"></script>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#fff}
+  #plot{width:100%;height:100%}
+</style>
+</head>
+<body>
+<div id="plot"></div>
+<script>
+function draw(){
+  var x = JSON.parse(Bridge.axisX());
+  var y = JSON.parse(Bridge.axisDepth());
+  var z = JSON.parse(Bridge.gridZ());
+  var logScale = Bridge.isLog();
+
+  var data = [{
+    x:x, y:y, z:z,
+    type:'contour',
+    colorscale:'Rainbow',
+    contours:{ showlabels:false },
+    colorbar:{ thickness:12, len:0.85, xpad:4, title: logScale ? 'lg' : '' },
+    hovertemplate:'X %{x} м<br>H %{y} м<br>Z %{z:.4f}<extra></extra>'
+  }];
+
+  var layout = {
+    margin:{t:8,b:38,l:48,r:4},
+    paper_bgcolor:'#fff', plot_bgcolor:'#fff',
+    font:{size:11},
+    xaxis:{ title:{text:'Профиль, м', standoff:6}, showgrid:true, zeroline:false },
+    yaxis:{ title:{text:'Глубина, м', standoff:6}, showgrid:true, zeroline:false }
+  };
+
+  Plotly.newPlot('plot', data, layout,
+    { displaylogo:false, responsive:true, displayModeBar:false });
+}
+window.addEventListener('load', draw);
+window.redraw = draw;
+</script>
+</body>
+</html>

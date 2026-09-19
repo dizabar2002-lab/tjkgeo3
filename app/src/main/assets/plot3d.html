@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="plotly.min.js"></script>
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#fff}
+  #plot{width:100%;height:100%}
+</style>
+</head>
+<body>
+<div id="plot"></div>
+<script>
+function draw(){
+  var x = JSON.parse(Bridge.volX());
+  var y = JSON.parse(Bridge.volY());
+  var z = JSON.parse(Bridge.volZ());
+  var v = JSON.parse(Bridge.volValue());
+
+  var data = [{
+    type:'isosurface',
+    x:x, y:y, z:z, value:v,
+    colorscale:'Rainbow',
+    surface:{count:3},
+    caps:{x:{show:false}, y:{show:false}, z:{show:false}},
+    colorbar:{thickness:12, len:0.8},
+    hovertemplate:'X %{x} м<br>Y %{y} м<br>H %{z} м<br>Z %{value:.4f}<extra></extra>'
+  }];
+
+  var layout = {
+    margin:{t:0,b:0,l:0,r:0},
+    scene:{
+      xaxis:{title:'Профиль, м'},
+      yaxis:{title:'Между линиями, м'},
+      zaxis:{title:'Глубина, м'}
+    }
+  };
+
+  Plotly.newPlot('plot', data, layout, {displaylogo:false, responsive:true});
+}
+window.addEventListener('load', draw);
+window.redraw = draw;
+</script>
+</body>
+</html>
